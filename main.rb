@@ -77,7 +77,7 @@ while true
 		   p "#{tweet.user.id} をフォローした"
 		end
 
-		client.search(ENV['FOLLOW_KEYWORD_3'], lang: "ja").take(5).each do |tweet|
+		client.search("to: #{myName}").take(5).each do |tweet|
 		   client.follow(tweet.user.id)
 		   p "#{tweet.user.id} をフォローした"
 		end
