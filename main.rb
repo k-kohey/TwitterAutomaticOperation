@@ -99,8 +99,8 @@ class Stream
 				if elapsed_minutes % (2 * 60) == 0
 					client.favorite()
 					client.followBack()					
-				# ３日に一回はリムーブ
-				elsif elapsed_minutes % (24 * 60 * 3) == 0
+				# 1日に一回はリムーブ
+				elsif elapsed_minutes % (24 * 60 * 1) == 0
 					client.remove()
 					# いつかオーバーフローしちゃうので初期化．
 					loop_count = 0
