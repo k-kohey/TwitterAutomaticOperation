@@ -46,7 +46,7 @@ while true
 				p "フォロバ完了"
 			end
 		# ３日に一回はリムーブ
-		elsif elapsed_minutes % (24 * 60 * 3)
+		elsif elapsed_minutes % (24 * 60 * 3) == 0
 			follower_ids = []
 			client.follower_ids(myName).each do |id|
 			  follower_ids.push(id)
@@ -59,7 +59,7 @@ while true
 			remove_target_user_ids = friend_ids - follower_ids
 			
 			if !remove_target_user_ids.empty? 
-				client.unfriend(friend_ids - follower_ids)
+				client.unfollow(friend_ids - follower_ids)
 				p "リムーブ完了"
 			end
 
@@ -77,7 +77,7 @@ while true
 		   p "#{tweet.user.id} をフォローした"
 		end
 
-		client.search("to: #{myName}").take(5).each do |tweet|
+		client.search("ENV['FOLLOW_KEYWORD_3'"], lang: "ja").take(5).each do |tweet|
 		   client.follow(tweet.user.id)
 		   p "#{tweet.user.id} をフォローした"
 		end
