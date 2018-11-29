@@ -48,12 +48,12 @@ class TwitterClient
 
 	def followBack()
 		follower_ids = []
-		@client.follower_ids(myName).each do |id|
+		@client.follower_ids(@myName).each do |id|
 		  follower_ids.push(id)
 		end
 		
 		friend_ids = []
-		@client.friend_ids(myName).each do |id|
+		@client.friend_ids(@myName).each do |id|
 		  friend_ids.push(id)
 		end
 		follow_target_user_ids = follower_ids - friend_ids
@@ -63,22 +63,22 @@ class TwitterClient
 		end
 	end
 
-	def self.remove()
+	def remove()
+		p "remove start"
 		follower_ids = []
-		@client.follower_ids(myName).each do |id|
+		@client.follower_ids(@myName).each do |id|
+			p id
 		  follower_ids.push(id)
 		end
 		
 		friend_ids = []
-		@client.friend_ids(myName).each do |id|
+		@client.friend_ids(@myName).take.each do |id|
+			p id
 		  friend_ids.push(id)
 		end
+
 		remove_target_user_ids = friend_ids - follower_ids
-		
-		if !remove_target_user_ids.empty? 
-			@client.unfollow(friend_ids - follower_ids)
-			p "リムーブ完了"
-		end
+		@client.unfollow(remove_target_user_ids)
 	end
 end
 
@@ -92,16 +92,16 @@ class Stream
 		client = TwitterClient.new()
 		while true 
 			begin
-				client.follow()
 				elapsed_minutes = loop_count * 15
+				#client.follow()
 				next if elapsed_minutes == 0
-				#2時間に一度
-				if elapsed_minutes % (2 * 60) == 0
+				#1時間に一度
+				if elapsed_minutes % (1 * 60) == 0
 					client.favorite()
 					client.followBack()					
 				# 1日に一回はリムーブ
 				elsif elapsed_minutes % (24 * 60 * 1) == 0
-					client.remove()
+					#client.remove()
 					# いつかオーバーフローしちゃうので初期化．
 					loop_count = 0
 				end				
