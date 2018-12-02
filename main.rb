@@ -72,13 +72,13 @@ class TwitterClient
 		end
 		
 		friend_ids = []
-		@client.friend_ids(@myName).take.each do |id|
+		@client.friend_ids(@myName).each do |id|
 			p id
 		  friend_ids.push(id)
 		end
 
 		remove_target_user_ids = friend_ids - follower_ids
-		@client.unfollow(remove_target_user_ids)
+		@client.unfollow(remove_target_user_ids.take(100)) if !remove_target_user_ids.empty?
 	end
 end
 
@@ -93,15 +93,15 @@ class Stream
 		while true 
 			begin
 				elapsed_minutes = loop_count * 15
-				#client.follow()
 				next if elapsed_minutes == 0
 				#1時間に一度
 				if elapsed_minutes % (1 * 60) == 0
+                    client.follow()
 					client.favorite()
 					client.followBack()					
 				# 1日に一回はリムーブ
 				elsif elapsed_minutes % (24 * 60 * 1) == 0
-					#client.remove()
+					client.remove()
 					# いつかオーバーフローしちゃうので初期化．
 					loop_count = 0
 				end				
@@ -118,4 +118,5 @@ end
 
 stream = Stream.new()
 stream.start()
+
 
